@@ -1,15 +1,14 @@
 <template>
   <div class="wrapper">
-    <label class="label"> {{ label }} </label>
-   <div class="">
+   <div class="label"> {{ label }} </div>
+   <div :class="inputWrapperStyle">
      <input
          :type="type"
          class="input"
      >
-
-     <img src="../assets/password.svg" alt="eye">
+     <slot/>
    </div>
-
+   <div class="error-message"> {{ errorMessage }} </div>
   </div>
 
 </template>
@@ -27,10 +26,16 @@ export default {
       type: String,
       required: true,
     },
-
+    isError: {
+      type: Boolean,
+      default: false,
+    },
+    errorMessage: String,
   },
-  components: {
-    
+  computed: {
+    inputWrapperStyle() {
+      return this.$props.isError ? "inputWrapperError" : "inputWrapper";
+    }
   }
 }
 </script>
@@ -41,15 +46,32 @@ export default {
     flex-direction: column;
   }
   .inputWrapper {
+    display: grid;
+    grid-template-columns: 16fr 1fr;
+    align-items: center;
     background: #F3F3FA;
     border-radius: 50px;
-    padding: 18px;
     border: none;
   }
-  .input{
-    background: #F3F3FA;
-    padding: 18px;
+  .inputWrapperError {
+    display: grid;
+    grid-template-columns: 16fr 1fr;
+    align-items: center;
+    border-radius: 50px;
     border: none;
+    background: #FF668333;
+  }
+  .input{
+    background: transparent;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+    display: flex;
+    align-items: center;
+    color: #181C43;
+    outline: none;
+    padding: 8px 18px;
   }
   .label {
     font-weight: 600;
@@ -59,6 +81,16 @@ export default {
     align-items: center;
     color: rgba(0, 0, 0, 0.8);
     padding-left: 18px;
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 18px;
+    padding-left: 18px;
+    font-size: 10px;
+    color: #FF6683;
   }
 
 </style>

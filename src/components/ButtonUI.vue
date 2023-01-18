@@ -1,6 +1,10 @@
 <template>
-  <button :class="btnStyle">
-      {{text}}
+  <button
+      type="button"
+      :class="className"
+      :disabled="disabled"
+  >
+    <slot />
   </button>
 </template>
 
@@ -8,20 +12,26 @@
 export default {
   name: "ButtonUI",
   props: {
-    text: {
+    disabled: Boolean,
+    color: {
       type: String,
-      default: 'Sign In'
-    },
-    isActive: {
-      type: Boolean,
-      required: true,
+      default: "blue",
+      validator(style) {
+        return ["blue", "white"].includes(style);
+      },
     }
   },
   computed: {
-    btnStyle() {
-      return this.$props.isActive ? 'btn' : 'btn btnDisabled';
-    }
-  }
+    className() {
+      const {disabled, color} = this.$props;
+      if (disabled) {
+        return 'btn btn-disabled';
+      }
+      const classes = ['btn'];
+      classes.push(`btn-${color}`);
+      return classes.join(" ");
+    },
+  },
 }
 </script>
 
@@ -32,15 +42,21 @@ export default {
   line-height: 20px;
   border-radius: 50px;
   border: none;
-  padding: 18px;
-  color: #FFFFFF;
-  background: #1E1A3E;
+  padding: 16px 32px;
 }
 .btn:hover {
   background-color: aqua;
 }
+.btn-white {
+  color: #000;
+  background: #FFFF;
+}
+.btn-blue {
+  color: #FFFFFF;
+  background: #1E1A3E;
+}
 
-.btnDisabled {
+.btn-disabled {
   opacity: 0.4;
 }
 </style>

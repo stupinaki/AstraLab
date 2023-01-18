@@ -1,29 +1,61 @@
 <template>
-  <h2> Sign Up </h2>
-  <form class="form">
-    <div class="inputs">
-      <InputUI
-          v-for="input in inputs"
-          :key="input.id"
-          :type="input.type"
-          :label="input.label"
-      />
-    </div>
-    <ButtonUI
-      :is-active="true"
+  <div class="signUp">
+    <h2> Sign Up </h2>
+    <form
+        @submit.prevent="onSubmit"
+        class="form"
+    >
+      <div class="inputs">
+        <InputUI
+            v-for="input in inputsRegular"
+            :key="input.id"
+            :type="input.type"
+            :label="input.label"
+            :error-message="input.errorMessage"
+        >
+        </InputUI>
+        <InputPassword
+            v-for="input in inputsPassword"
+            :key="input.id"
+            :label="input.label"
+            :error-message="input.errorMessage"
+        />
+      </div>
+
+      <ButtonUI
+          color="blue"
+      >
+        Sign Up
+      </ButtonUI>
+    </form>
+
+    <ChangePageLink
+        title="Already have an account?"
+        router-name="SignIn"
+        link-text="Sign In"
     />
-  </form>
+
+    <PasswordHint/>
+    <WrongData/>
+
+  </div>
 </template>
 
 <script>
+import {routerNames} from "@/router/routers.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
+import PasswordHint from "@/components/PasswordHint.vue";
+import WrongData from "@/components/WrongData";
+import ChangePageLink from "@/components/ChangePageLink.vue";
+import InputPassword from "@/components/InputPassword.vue";
 
 export default {
   name: "SignUp",
   data() {
     return {
-      inputs: [
+      routerNames,
+      inputsRegular: [
         {
           id: 1,
           label: 'Full name',
@@ -32,8 +64,11 @@ export default {
         {
           id: 2,
           label: 'Email',
-          type: 'text'
+          type: 'text',
+          errorMessage: 'Enter valid email',
         },
+      ],
+      inputsPassword: [
         {
           id: 3,
           label: 'Password',
@@ -50,11 +85,33 @@ export default {
   components: {
     InputUI,
     ButtonUI,
+    PasswordHint,
+    WrongData,
+    ChangePageLink,
+    InputPassword,
+  },
+  methods: {
+    onSubmit() {
+      // console.log('отправляем форму')
+      //todo не отправлять при начатии на кнопку с глазом
+    },
+    onChangeInputType() {
+      console.log('мы получили событие с просьбой сменить тип инпута')
+    }
   }
 }
 </script>
 
 <style scoped>
+.signUp {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .form {
   background: #FFFFFF;
   border-radius: 40px;
@@ -70,7 +127,7 @@ export default {
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
 }
 
 </style>

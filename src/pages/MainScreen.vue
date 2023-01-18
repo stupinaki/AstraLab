@@ -1,6 +1,6 @@
 <template>
   <h2> {{headerWelcome}} </h2>
-  <img src="../assets/womanMainScreen.jpg" alt="woman in a chair">
+  <img src="../assets/womanMainScreen.png" alt="woman in a chair">
 </template>
 
 <script>
@@ -14,7 +14,8 @@ export default {
   },
    computed: {
     headerWelcome () {
-      return 'Hello, ' + this.$props.userName + '!';
+      const name  = this.$props.userName || 'Dear user';
+      return 'Hello, ' + name + '!';
     }
    }
 }

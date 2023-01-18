@@ -1,21 +1,12 @@
 <template>
-  <MainScreen
-      user-name="John Doe"
-  />
-
-  <SignUp/>
+  <div class="appContainer">
+    <router-view />
+  </div>
 </template>
 
 <script>
-import MainScreen from "@/pages/MainScreen.vue";
-import SignUp from "@/pages/SignUp.vue";
-
 export default {
   name: 'App',
-  components: {
-    MainScreen,
-    SignUp
-  }
 }
 </script>
 
@@ -31,5 +22,15 @@ export default {
   text-align: center;
   background-color:  #FAF3F3;
   height: 100vh;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 40px;
+  box-sizing: border-box;
 }
 </style>
