@@ -3,17 +3,25 @@
    <div class="label"> {{ label }} </div>
    <div :class="inputWrapperStyle">
      <input
+         v-model="inputValue"
          :type="type"
          class="input"
+         @blur="onBlur"
+         @focus="onFocus"
      >
      <slot/>
    </div>
-   <div class="error-message"> {{ errorMessage }} </div>
+   <div class="error-message">
+     <div v-show="isError">
+       {{ errorMessage }}
+     </div>
+   </div>
   </div>
 
 </template>
 
 <script>
+import {validateEmail} from "@/helpers/validateEmail.js";
 
 export default {
   name: "InputUI",
@@ -26,15 +34,27 @@ export default {
       type: String,
       required: true,
     },
-    isError: {
-      type: Boolean,
-      default: false,
-    },
     errorMessage: String,
+  },
+  data() {
+    return {
+      inputValue: undefined,
+      isError: false,
+    }
   },
   computed: {
     inputWrapperStyle() {
-      return this.$props.isError ? "inputWrapperError" : "inputWrapper";
+      return this.$data.isError ? "inputWrapperError" : "inputWrapper";
+    }
+  },
+  methods: {
+    onBlur() {
+      if(this.$props.type === 'email') {
+        this.$data.isError = !validateEmail(this.inputValue);
+      }
+    },
+    onFocus() {
+      this.$data.isError = false;
     }
   }
 }
@@ -46,12 +66,14 @@ export default {
     flex-direction: column;
   }
   .inputWrapper {
-    display: grid;
-    grid-template-columns: 16fr 1fr;
     align-items: center;
     background: #F3F3FA;
     border-radius: 50px;
     border: none;
+    padding: 8px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
   }
   .inputWrapperError {
     display: grid;
@@ -60,6 +82,7 @@ export default {
     border-radius: 50px;
     border: none;
     background: #FF668333;
+    padding: 8px 18px;
   }
   .input{
     background: transparent;
@@ -71,7 +94,7 @@ export default {
     align-items: center;
     color: #181C43;
     outline: none;
-    padding: 8px 18px;
+    width: 100%;
   }
   .label {
     font-weight: 600;

@@ -1,20 +1,27 @@
 <template>
   <div class="SignIn">
     <h2> Sign In </h2>
-    <form class="form">
+    <form
+        class="form"
+        @submit.prevent="onSubmit"
+    >
       <div class="inputs">
         <InputUI
-            v-for="input in inputs"
+            v-for="input in inputsRegular"
             :key="input.id"
             :type="input.type"
             :label="input.label"
+            :error-message="input.errorMessage"
         >
-          <img v-if="input.type === 'password'" src="../assets/password.svg" alt="eye">
         </InputUI>
+        <InputPassword
+            v-for="input in inputsPassword"
+            :key="input.id"
+            :label="input.label"
+            :error-message="input.errorMessage"
+        />
       </div>
-      <ButtonUI
-          color="blue"
-      >
+      <ButtonUI color="blue">
         Sign In
       </ButtonUI>
     </form>
@@ -33,22 +40,28 @@ import {routerNames} from "@/router/routers.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
 import ChangePageLink from "@/components/ChangePageLink.vue";
+import InputPassword from "@/components/InputPassword.vue";
 
 export default {
   name: "SignIn",
   data() {
     return {
       routerNames,
-      inputs: [
+      inputsRegular: [
         {
           id: 6,
           label: 'Email',
-          type: 'text'
+          type: 'email',
+          errorMessage: 'Enter valid email',
         },
+      ],
+      inputsPassword: [
         {
           id: 7,
           label: 'Password',
-          type: 'password'
+          type: 'password',
+          errorMessage: 'Enter valid password',
+
         },
       ]
     }
@@ -56,7 +69,14 @@ export default {
   components: {
     InputUI,
     ButtonUI,
-    ChangePageLink
+    ChangePageLink,
+    InputPassword,
+  },
+  methods: {
+    onSubmit() {
+      // console.log('отправляем форму')
+      //todo не отправлять при начатии на кнопку с глазом
+    },
   }
 }
 

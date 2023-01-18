@@ -19,12 +19,10 @@
             :key="input.id"
             :label="input.label"
             :error-message="input.errorMessage"
+            :is-hint="input.isHint"
         />
       </div>
-
-      <ButtonUI
-          color="blue"
-      >
+      <ButtonUI color="blue">
         Sign Up
       </ButtonUI>
     </form>
@@ -59,12 +57,13 @@ export default {
         {
           id: 1,
           label: 'Full name',
-          type: 'text'
+          type: 'text',
+          errorMessage: 'this field cannot be empty',
         },
         {
           id: 2,
           label: 'Email',
-          type: 'text',
+          type: 'email',
           errorMessage: 'Enter valid email',
         },
       ],
@@ -72,12 +71,16 @@ export default {
         {
           id: 3,
           label: 'Password',
-          type: 'password'
+          type: 'password',
+          errorMessage: 'Enter valid password',
+          isHint: true,
         },
         {
           id: 4,
           label: 'Repeat password',
-          type: 'password'
+          type: 'password',
+          errorMessage: 'Passwords do not match',
+          isHint: false,
         },
       ]
     }
@@ -95,9 +98,6 @@ export default {
       // console.log('отправляем форму')
       //todo не отправлять при начатии на кнопку с глазом
     },
-    onChangeInputType() {
-      console.log('мы получили событие с просьбой сменить тип инпута')
-    }
   }
 }
 </script>

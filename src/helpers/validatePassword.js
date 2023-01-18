@@ -6,17 +6,12 @@ export function validatePassword(password) {
         ',', '-', '.', '/', ':', ';', '<', '=', '>',
         '?', '@', '[', ']', '^', '_', '{', '}', '~'
     ]
-    if(password.length < 8) {
-        return false; // "недостаточная длина пароля"
-    }
-    const capitalLetters = /[A-Z]/g;
-    const isEnoughCapitalLetters = password.match(capitalLetters).length < 2;
-    if(isEnoughCapitalLetters) {
-        return false; // "недостаточно Заглавных букв"
-    }
-    const isSymbol = password.split('').some(char => symbols.includes(char));
-    if(isSymbol) {
-        return true;
-    }
+    const capitalLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    const arr = password.split('');
+    const isEnoughCapitalLetters = arr.filter(char => capitalLetters.includes(char)).length > 1;
+    const isSymbol = arr.some(char => symbols.includes(char));
+
+    return arr.length > 7 && isEnoughCapitalLetters && isSymbol;
 }
 

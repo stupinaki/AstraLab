@@ -1,21 +1,37 @@
 <template>
   <div class="wrapper">
-    <div class="label"> {{ label }} </div>
+    <div class="label">
+      <p>{{ label }} </p>
+      <button
+          v-show="isHint"
+          class="question-btn"
+      >
+        <img src="../assets/question.svg" alt="question sign">
+      </button>
+    </div>
     <div :class="inputWrapperStyle">
       <input
+          v-model="password"
           :type="inputType"
           class="input"
           autocomplete="current-password"
+          @blur="onBlur"
+          @focus="onFocus"
       >
       <ButtonToggleImg
           @changeInputType="onChangeInputType"
       />
     </div>
-    <div class="error-message"> {{ errorMessage }} </div>
+    <div class="error-message">
+      <div v-show="isError">
+        {{ errorMessage }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { validatePassword } from "@/helpers/validatePassword.js";
 import ButtonToggleImg from "@/components/ButtonToggleImg.vue";
 
 export default {
@@ -23,6 +39,8 @@ export default {
   data() {
     return {
       isTypePassword: true,
+      password: undefined,
+      isError: false,
     }
   },
   props: {
@@ -30,18 +48,15 @@ export default {
       type: String,
       required: true,
     },
-    isError: {
-      type: Boolean,
-      default: false,
-    },
     errorMessage: String,
+    isHint: Boolean,
   },
   components: {
     ButtonToggleImg
   },
   computed: {
     inputWrapperStyle() {
-      return this.$props.isError ? "inputWrapperError" : "inputWrapper";
+      return this.$data.isError ? "input-wrapper-error" : "input-wrapper";
     },
     inputType() {
       return this.$data.isTypePassword ? 'password' : 'text';
@@ -50,6 +65,12 @@ export default {
   methods: {
     onChangeInputType() {
       this.$data.isTypePassword = !this.$data.isTypePassword;
+    },
+    onBlur() {
+      this.$data.isError = !validatePassword(this.$data.password);
+    },
+    onFocus() {
+      this.$data.isError = false;
     }
   }
 }
@@ -60,21 +81,25 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.inputWrapper {
-  display: grid;
-  grid-template-columns: 16fr 1fr;
+.input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
   align-items: center;
   background: #F3F3FA;
   border-radius: 50px;
   border: none;
+  padding: 8px 18px;
 }
-.inputWrapperError {
-  display: grid;
-  grid-template-columns: 16fr 1fr;
+.input-wrapper-error {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
   align-items: center;
   border-radius: 50px;
   border: none;
   background: #FF668333;
+  padding: 8px 18px;
 }
 .input{
   background: transparent;
@@ -86,7 +111,7 @@ export default {
   align-items: center;
   color: #181C43;
   outline: none;
-  padding: 8px 18px;
+  width: 100%;
 }
 .label {
   font-weight: 600;
@@ -95,7 +120,8 @@ export default {
   display: flex;
   align-items: center;
   color: rgba(0, 0, 0, 0.8);
-  padding-left: 18px;
+  justify-content: space-between;
+  padding: 0 18px;
 }
 
 .error-message {
@@ -106,5 +132,12 @@ export default {
   padding-left: 18px;
   font-size: 10px;
   color: #FF6683;
+}
+
+.question-btn {
+  border: none;
+  background-color: transparent;
+  padding-right: 4px;
+  cursor: pointer;
 }
 </style>
