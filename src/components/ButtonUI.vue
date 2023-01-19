@@ -2,7 +2,7 @@
   <button
       type="button"
       :class="className"
-      :disabled="disabled"
+      :disabled="isDisabled"
   >
     <slot />
   </button>
@@ -12,7 +12,7 @@
 export default {
   name: "ButtonUI",
   props: {
-    disabled: Boolean,
+    isDisabled: Boolean,
     color: {
       type: String,
       default: "blue",
@@ -23,8 +23,8 @@ export default {
   },
   computed: {
     className() {
-      const {disabled, color} = this.$props;
-      if (disabled) {
+      const {isDisabled, color} = this.$props;
+      if (isDisabled) {
         return 'btn btn-disabled';
       }
       const classes = ['btn'];
@@ -32,6 +32,7 @@ export default {
       return classes.join(" ");
     },
   },
+
 }
 </script>
 
@@ -44,9 +45,6 @@ export default {
   border: none;
   padding: 16px 32px;
 }
-.btn:hover {
-  background-color: aqua;
-}
 .btn-white {
   color: #000;
   background: #FFFF;
@@ -55,8 +53,13 @@ export default {
   color: #FFFFFF;
   background: #1E1A3E;
 }
+.btn-blue:hover,
+.btn-blue:hover {
+  background-color: aqua;
+}
 
 .btn-disabled {
-  opacity: 0.4;
+  color: #FFFFFF;
+  background-color: #1E1A3E66;
 }
 </style>

@@ -36,6 +36,10 @@ export default {
       type: String,
       required: true,
     },
+    isNeedValidateEmail: {
+      type: Boolean,
+      default: false,
+    },
     errorMessage: String,
   },
   data() {
@@ -51,11 +55,14 @@ export default {
   },
   methods: {
     onBlur() {
-      if(this.$props.type === 'email') {
+      if(this.$props.isNeedValidateEmail) {
         this.$data.isError = !validateEmail(this.inputValue);
       }
     },
-    onFocus() {
+    onFocus(e) {
+      if(this.$data.inputValue) {
+        e.target.select();
+      }
       this.$data.isError = false;
     },
     onChange() {

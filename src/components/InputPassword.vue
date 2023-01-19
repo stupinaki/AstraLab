@@ -47,7 +47,14 @@ export default {
       required: true,
     },
     errorMessage: String,
-    isHint: Boolean,
+    isHint: {
+      type: Boolean,
+      default: false,
+    },
+    isNeedValidatePassword: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     ButtonToggleImg,
@@ -66,14 +73,20 @@ export default {
       this.$data.isTypePassword = !this.$data.isTypePassword;
     },
     onBlur() {
-      this.$data.isError = !validatePassword(this.$data.password);
+      if(this.$props.isNeedValidatePassword) {
+        this.$data.isError = !validatePassword(this.$data.password);
+      }
     },
-    onFocus() {
+    onFocus(e) {
+      if(this.$data.password) {
+        e.target.select();
+      }
       this.$data.isError = false;
     },
     onChange() {
       this.$emit('passwordInputChange', this.$data.password)
     },
+    //todo добавить проверку что повторно введенные пароли совпадают
   }
 }
 </script>

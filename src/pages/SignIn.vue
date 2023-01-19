@@ -1,8 +1,6 @@
 <template>
-  <div class="SignIn">
-    <h2> Sign In </h2>
-    inputRegularValue: {{inputRegularValue}}
-    inputPasswordValue: {{inputPasswordValue}}
+  <div class="sign-in">
+    <h2 class="title"> Sign In </h2>
     <form
         class="form"
         @submit.prevent="onSubmit"
@@ -12,21 +10,18 @@
             :key="inputRegular.id"
             :type="inputRegular.type"
             :label="inputRegular.label"
-            :error-message="inputRegular.errorMessage"
             @regularInputChange="onRegularInputChange"
         >
         </InputUI>
         <InputPassword
-            v-model="inputPasswordValue"
             :key="inputPassword.id"
             :label="inputPassword.label"
-            :error-message="inputPassword.errorMessage"
-            :is-hint="inputPassword.isHint"
             @passwordInputChange="onPasswordInputChange"
         />
       </div>
       <ButtonUI
           color="blue"
+          :is-disabled="isBtnDisabled"
           @click="onClick"
       >
         Sign In
@@ -38,7 +33,11 @@
       router-name="SignUp"
       link-text="Sign Up"
     />
-    <WrongData/>
+    <WrongData
+        :is-visible="isEmailOrPasswordWrong"
+        @closeWarning="onCloseWarning"
+        class="warning-hint"
+    />
   </div>
 </template>
 
@@ -50,7 +49,7 @@ import ButtonUI from "@/components/ButtonUI.vue";
 import WrongData from "@/components/WrongData";
 import ChangePageLink from "@/components/ChangePageLink.vue";
 import InputPassword from "@/components/InputPassword.vue";
-//todo нужно ли удалять вализацию?
+
 //1 get data from form
 // 2 sent it to backend with question "do you have this data?"
 // 3 if it correct data - open welcome page, if not - show hint and make all inputs red
@@ -62,8 +61,13 @@ export default {
       routerNames,
       inputRegular,
       inputPassword,
-      inputRegularValue: undefined,
-      inputPasswordValue: undefined,
+      inputsValue: {
+        inputRegularValue: undefined,
+        inputPasswordValue: undefined,
+      },
+      isBtnDisabled: true,
+      //todo нужно брать злачение из ответа от бекенда
+      isEmailOrPasswordWrong: true,
     }
   },
   components: {
@@ -79,16 +83,17 @@ export default {
       //todo не отправлять при начатии на кнопку с глазом
     },
     onRegularInputChange(data) {
-      this.$data.inputRegularValue = data;
+      this.$data.inputsValue.inputRegularValue = data;
     },
     onPasswordInputChange(data) {
-      this.$data.inputPasswordValue = data;
+      this.$data.inputsValue.inputPasswordValue = data;
     },
     onClick() {
       const requestData = {
-        email: this.$data.inputRegularValue,
+        email: this.$data.inputsValue.inputRegularValue,
         password: this.$data.inputPassword,
       }
+      //в response ожидаю boolean значение от бека, есть такой пользователь или нет
       const response = fetch('адресс где лежат данные', {
         method: 'GET',
         headers: {
@@ -99,19 +104,32 @@ export default {
       })
           .then((response) => response.json())
 
-    //в response ожидаю boolean значение от бека, есть такой пользователь или нет
       if(response) {
-        //то пользователь переходит на страницу с приветсивем
+        this.$router.push('/welcome');
+      }else{
+        this.$data.isEmailOrPasswordWrong = true;
       }
-      //если пришел false, то показать всплывашку с текстом, что что-то введено неверно
+    },
+    onCloseWarning() {
+      this.$data.isEmailOrPasswordWrong = false;
+    }
+  },
+  watch: {
+    inputsValue: {
+      handler(newValue) {
+        const {inputRegularValue, inputPasswordValue} = newValue;
+        if(inputRegularValue && inputPasswordValue) {
+          this.$data.isBtnDisabled = false;
+        }
+      },
+      deep: true,
     }
   }
 }
-
 </script>
 
 <style scoped>
-.SignIn {
+.sign-in {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -121,6 +139,14 @@ export default {
   padding-top: 64px;
 }
 
+.title {
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 136%;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #181C43;
+}
 .form {
   background: #FFFFFF;
   border-radius: 40px;
@@ -139,6 +165,8 @@ export default {
   gap: 8px;
 }
 
-
-
+.warning-hint {
+  position: fixed;
+  bottom: 2%;
+}
 </style>

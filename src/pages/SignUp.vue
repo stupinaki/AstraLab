@@ -1,6 +1,6 @@
 <template>
-  <div class="signUp">
-    <h2> Sign Up </h2>
+  <div class="sign-up">
+    <h2 class="title"> Sign Up </h2>
     <form
         @submit.prevent="onSubmit"
         class="form"
@@ -12,6 +12,7 @@
             :type="input.type"
             :label="input.label"
             :error-message="input.errorMessage"
+            :is-need-validate-email="input.type === 'email'"
         >
         </InputUI>
         <InputPassword
@@ -20,9 +21,14 @@
             :label="input.label"
             :error-message="input.errorMessage"
             :is-hint="input.isHint"
+            :is-need-validate-password="true"
         />
       </div>
-      <ButtonUI color="blue">
+      <ButtonUI
+          color="blue"
+          :is-disabled="isBtnDisabled"
+          @click="onClick"
+      >
         Sign Up
       </ButtonUI>
     </form>
@@ -32,7 +38,6 @@
         router-name="SignIn"
         link-text="Sign In"
     />
-
   </div>
 </template>
 
@@ -51,6 +56,7 @@ export default {
       routerNames,
       inputsRegular,
       inputsPassword,
+      isBtnDisabled: true,
     }
   },
   components: {
@@ -64,12 +70,15 @@ export default {
       // console.log('отправляем форму')
       //todo не отправлять при начатии на кнопку с глазом
     },
+    onClick() {
+      console.log('мы нажами на кнопку!!!')
+    }
   }
 }
 </script>
 
 <style scoped>
-.signUp {
+.sign-up {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -95,6 +104,15 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 136%;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #181C43;
 }
 
 </style>

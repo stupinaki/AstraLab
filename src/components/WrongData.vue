@@ -1,7 +1,10 @@
 <template>
-  <div class="wrapper">
-    <div class="text">Wrong email or password</div>
-    <button class="close-btn">
+  <div :class="wrapperStyle">
+    <div class="text"> {{ text }} </div>
+    <button
+        class="close-btn"
+        @click="onClick"
+    >
       <img src="../assets/x.svg" alt="x">
     </button>
   </div>
@@ -9,33 +12,57 @@
 
 <script>
 export default {
-  name: "WrongData"
+  name: "WrongData",
+  emits: ['closeWarning'],
+  props: {
+    text: {
+      type: String,
+      default: 'Wrong email or password'
+    },
+    isVisible: Boolean,
+  },
+  computed: {
+    wrapperStyle() {
+      return this.$props.isVisible ? 'wrapper' : 'wrapper-hide';
+    }
+  },
+  methods: {
+    onClick() {
+      this.$emit('closeWarning');
+    }
+  }
 }
 </script>
 
 <style scoped>
 .wrapper{
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  padding: 16px 32px;
+  justify-content: center;
   background: #FF6683;
   border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 28px;
-  padding: 16px 32px;
+  box-sizing: border-box;
+}
+.wrapper-hide {
+  display: none;
 }
 .close-btn {
+  position: absolute;
+  top: 40%;
+  right: 8%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.text {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  background-color: transparent;
-}
-.text {
   font-weight: 500;
   font-size: 14px;
   line-height: 143%;
-  display: flex;
-  align-items: center;
   color: #FFFFFF;
 }
 </style>
