@@ -1,16 +1,18 @@
 <template>
-  <div class="wrapper">
-    <div class="text">
-      Password must contain 8+ symbols, 1 special and 2 capital letters
+  <div>
+    <div class="wrapper">
+      <div class="text">
+        Password must contain 8+ symbols, 1 special and 2 capital letters
+      </div>
+      <div class="polygon"></div>
     </div>
-    <div class="polygon"></div>
   </div>
 
 </template>
 
 <script>
 export default {
-  name: "PasswordHint"
+  name: "PasswordHint",
 }
 </script>
 
@@ -20,7 +22,7 @@ export default {
   background: #1E1A3E;
   box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  max-width: 184px;
+  width: 184px;
 }
 .text {
   font-weight: 400;

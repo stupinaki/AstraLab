@@ -1,21 +1,31 @@
 <template>
-  <div class="enterScreen">
-    <h2 class="title">Ready for a great User experience?</h2>
-    <p class="subTitle">Bring your media to the next level!</p>
-      <router-link
-          :to="{name: routerNames.SignIn}"
-          class="buttons"
-      >
-        <ButtonUI
-            color="white"
-        >
-          Sign In
-        </ButtonUI>
-        <img src="../assets/buttonRound.svg" alt="arrow">
-      </router-link>
+    <div class="enter-screen">
+      <div class="description">
+        <h2 class="title">Ready for a great User experience?</h2>
+        <span class="sub-title">Bring your media to the next level!</span>
 
-    <img src="../assets/womanEnterScreen.png" alt="woman">
-  </div>
+        <div class="link-wrapper">
+          <router-link
+              :to="{name: routerNames.SignIn}"
+              class="link"
+          >
+            <ButtonUI color="white">
+              Sign In
+            </ButtonUI>
+          </router-link>
+
+          <router-link
+              :to="{name: routerNames.SignIn}"
+              class="link"
+          >
+            <img src="../assets/buttonRound.svg" alt="arrow">
+          </router-link>
+        </div>
+      </div>
+      <div class="img-wrapper">
+        <img src="../assets/womanEnterScreen.png" alt="woman" class="img">
+      </div>
+    </div>
 </template>
 
 <script>
@@ -36,12 +46,22 @@ export default {
 </script>
 
 <style scoped>
-.enterScreen{
+@import "../variables.scss";
+.enter-screen{
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  gap:12px;
+  height: 100%;
+  overflow: hidden;
+  //padding-top: $main-top-page-padding;
+}
+
+.description {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px
+  gap: 20px;
 }
 
 .title {
@@ -55,7 +75,7 @@ export default {
   color: #181C43;
 }
 
-.subTitle {
+.sub-title {
   font-weight: 400;
   font-size: 14px;
   line-height: 143% ;
@@ -66,11 +86,27 @@ export default {
   color: #3E4462;
 }
 
-.buttons {
+.link-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+.link {
+  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.img-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.img {
+  //height: 100%;
+  //max-width: 100%;
+  min-height: 100%;
+  max-width: 100%;
 }
 </style>

@@ -2,12 +2,7 @@
   <div class="wrapper">
     <div class="label">
       <p>{{ label }} </p>
-      <button
-          v-show="isHint"
-          class="question-btn"
-      >
-        <img src="../assets/question.svg" alt="question sign">
-      </button>
+      <ButtonAndHint v-show="isHint"/>
     </div>
     <div :class="inputWrapperStyle">
       <input
@@ -17,6 +12,7 @@
           autocomplete="current-password"
           @blur="onBlur"
           @focus="onFocus"
+          @change="onChange"
       >
       <ButtonToggleImg
           @changeInputType="onChangeInputType"
@@ -33,9 +29,11 @@
 <script>
 import { validatePassword } from "@/helpers/validatePassword.js";
 import ButtonToggleImg from "@/components/ButtonToggleImg.vue";
+import ButtonAndHint from "@/components/ButtonAndHint.vue";
 
 export default {
   name: "InputPassword",
+  emits: ['passwordInputChange'],
   data() {
     return {
       isTypePassword: true,
@@ -52,7 +50,8 @@ export default {
     isHint: Boolean,
   },
   components: {
-    ButtonToggleImg
+    ButtonToggleImg,
+    ButtonAndHint,
   },
   computed: {
     inputWrapperStyle() {
@@ -71,7 +70,10 @@ export default {
     },
     onFocus() {
       this.$data.isError = false;
-    }
+    },
+    onChange() {
+      this.$emit('passwordInputChange', this.$data.password)
+    },
   }
 }
 </script>
@@ -134,10 +136,5 @@ export default {
   color: #FF6683;
 }
 
-.question-btn {
-  border: none;
-  background-color: transparent;
-  padding-right: 4px;
-  cursor: pointer;
-}
+
 </style>

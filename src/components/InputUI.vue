@@ -8,6 +8,7 @@
          class="input"
          @blur="onBlur"
          @focus="onFocus"
+         @change="onChange"
      >
      <slot/>
    </div>
@@ -25,6 +26,7 @@ import {validateEmail} from "@/helpers/validateEmail.js";
 
 export default {
   name: "InputUI",
+  emits: ['regularInputChange'],
   props: {
     type: {
       type: String,
@@ -55,6 +57,9 @@ export default {
     },
     onFocus() {
       this.$data.isError = false;
+    },
+    onChange() {
+      this.$emit('regularInputChange', this.$data.inputValue)
     }
   }
 }

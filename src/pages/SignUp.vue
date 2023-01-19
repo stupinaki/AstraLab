@@ -33,18 +33,14 @@
         link-text="Sign In"
     />
 
-    <PasswordHint/>
-    <WrongData/>
-
   </div>
 </template>
 
 <script>
+import {inputsRegular, inputsPassword} from "../../data/signUpInputsData";
 import {routerNames} from "@/router/routers.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
-import PasswordHint from "@/components/PasswordHint.vue";
-import WrongData from "@/components/WrongData";
 import ChangePageLink from "@/components/ChangePageLink.vue";
 import InputPassword from "@/components/InputPassword.vue";
 
@@ -53,43 +49,13 @@ export default {
   data() {
     return {
       routerNames,
-      inputsRegular: [
-        {
-          id: 1,
-          label: 'Full name',
-          type: 'text',
-          errorMessage: 'this field cannot be empty',
-        },
-        {
-          id: 2,
-          label: 'Email',
-          type: 'email',
-          errorMessage: 'Enter valid email',
-        },
-      ],
-      inputsPassword: [
-        {
-          id: 3,
-          label: 'Password',
-          type: 'password',
-          errorMessage: 'Enter valid password',
-          isHint: true,
-        },
-        {
-          id: 4,
-          label: 'Repeat password',
-          type: 'password',
-          errorMessage: 'Passwords do not match',
-          isHint: false,
-        },
-      ]
+      inputsRegular,
+      inputsPassword,
     }
   },
   components: {
     InputUI,
     ButtonUI,
-    PasswordHint,
-    WrongData,
     ChangePageLink,
     InputPassword,
   },
@@ -110,6 +76,7 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding-top: 64px;
 }
 
 .form {
@@ -117,7 +84,7 @@ export default {
   border-radius: 40px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
   width: 90%;
   margin: 0 auto;
   padding: 24px 22px 18px;
