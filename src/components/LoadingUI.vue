@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../variables";
+@import "../style/variables";
 
 .loader-wrapper {
   position: fixed;

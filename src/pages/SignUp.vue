@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-up">
+  <div class="page-wrapper ">
     <h2 class="title"> Sign Up </h2>
     <form
         @submit.prevent="onSubmit"
@@ -47,12 +47,11 @@
         link-text="Sign In"
     />
     <WrongData
-        :is-visible="isSomeDataWrong"
+        :is-visible="isFormInvalid"
         text="Some data was incorrect, please try again"
         class="warning-hint"
         @closeWarning="onCloseWarning"
     />
-
     <LoadingUI v-if="isLoading"/>
   </div>
 </template>
@@ -84,7 +83,7 @@ export default {
         passwordRepeat: undefined,
       },
       isLoading:  false,
-      isSomeDataWrong: false,
+      isFormInvalid: false,
     }
   },
   components: {
@@ -96,18 +95,26 @@ export default {
     ChangePageLink,
   },
   computed: {
-    isFullNameValid() {
-      return checkName(this.$data.inputsValue.fullName);
-    },
     isEmailValid() {
       return validateEmail(this.$data.inputsValue.email);
+    },
+    isPasswordValid() {
+      return validatePassword(this.$data.inputsValue.password);
+    },
+    isFullNameValid() {
+      return checkName(this.$data.inputsValue.fullName);
     },
     isPasswordRepeatMatch() {
       const {password, passwordRepeat} = this.$data.inputsValue;
       return comparePasswords(password, passwordRepeat);
     },
-    isPasswordValid() {
-      return validatePassword(this.$data.inputsValue.password);
+    isNeedErrorMessageForEmail() {
+      const email = this.$data.inputsValue.email;
+      const isDidNotTouch = email === undefined;
+      if(isDidNotTouch || this.isEmailValid) {
+        return '';
+      }
+      return 'Enter valid email';
     },
     isNeedErrorMessageForPassword() {
       const password = this.$data.inputsValue.password;
@@ -133,14 +140,6 @@ export default {
       }
       return 'this field cannot be empty';
     },
-    isNeedErrorMessageForEmail() {
-      const email = this.$data.inputsValue.email;
-      const isDidNotTouch = email === undefined;
-      if(isDidNotTouch || this.isEmailValid) {
-        return '';
-      }
-      return 'Enter valid email';
-    },
 
   },
   methods: {
@@ -154,14 +153,14 @@ export default {
         this.$router.push('/welcome');
         return;
       }
-      this.$data.isSomeDataWrong = true;
+      this.$data.isFormInvalid = true;
     },
     onInputChange(data) {
       const key = data.inputId;
       this.$data.inputsValue[key] = data.value || '';
     },
     onCloseWarning() {
-      this.$data.isSomeDataWrong = false;
+      this.$data.isFormInvalid = false;
     }
   },
   watch: {
@@ -182,48 +181,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../variables";
-
-.sign-up {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: 64px;
-}
-
-.form {
-  background: $default-background;
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 90%;
-  margin: 0 auto;
-  padding: 24px 22px 18px;
-  box-sizing: border-box;
-}
-
-.inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.title {
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 136%;
-  text-align: center;
-  letter-spacing: 0.02em;
-  color: $default-text-color;
-}
-
-.warning-hint {
-  position: fixed;
-  bottom: 2%;
-}
+@import "src/style/formPageStyle";
 
 </style>

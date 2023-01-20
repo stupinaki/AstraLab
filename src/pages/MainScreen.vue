@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../variables";
+@import "../style/variables";
 
 .welcome-page {
   display: grid;

@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-in">
+  <div class="page-wrapper">
     <h2 class="title"> Sign In </h2>
     <form
         class="form"
@@ -138,46 +138,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../variables";
-
-.sign-in {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: 64px;
-}
-
-.title {
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 136%;
-  text-align: center;
-  letter-spacing: 0.02em;
-  color: $default-text-color;
-}
-.form {
-  background: $default-background;
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 90%;
-  margin: 0 auto;
-  padding: 24px 22px 18px;
-  box-sizing: border-box;
-}
-
-.inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.warning-hint {
-  position: fixed;
-  bottom: 2%;
-}
+@import "src/style/formPageStyle";
 </style>

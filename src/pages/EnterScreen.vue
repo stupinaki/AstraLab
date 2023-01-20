@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../variables";
+@import "../style/variables";
 
 .enter-screen{
   display: flex;
