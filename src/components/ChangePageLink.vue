@@ -32,7 +32,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .linkWrapper {
   display: flex;
   flex-direction: column;
@@ -40,7 +42,7 @@ export default {
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #1E1A3E;
+  color: $default-btn-background;
 }
 
 .link {
@@ -49,7 +51,7 @@ export default {
 }
 
 .link:hover {
-  color: aqua;
+  color: $hover-color;
 }
 
 .line {

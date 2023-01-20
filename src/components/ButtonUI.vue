@@ -24,10 +24,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .btn {
-  color: #FFFFFF;
-  background: #1E1A3E;
+  color: $default-background;
+  background: $default-btn-background;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -37,12 +39,12 @@ export default {
 }
 
 .btn:hover {
-  background-color: aqua;
+  background-color: $hover-color;
 }
 
 .btn-disabled {
-  color: #FFFFFF;
-  background-color: #1E1A3E66;
+  color: $default-background;
+  background-color: $default-btn-disabled-background;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;

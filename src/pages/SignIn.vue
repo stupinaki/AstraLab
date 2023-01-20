@@ -137,7 +137,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .sign-in {
   display: flex;
   flex-direction: column;
@@ -154,10 +156,10 @@ export default {
   line-height: 136%;
   text-align: center;
   letter-spacing: 0.02em;
-  color: #181C43;
+  color: $default-text-color;
 }
 .form {
-  background: #FFFFFF;
+  background: $default-background;
   border-radius: 40px;
   display: flex;
   flex-direction: column;

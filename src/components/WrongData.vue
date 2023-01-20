@@ -34,14 +34,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .wrapper{
   position: relative;
   width: 90%;
   margin: 0 auto;
   padding: 16px 32px;
   justify-content: center;
-  background: #FF6683;
+  background: $error-color;
   border-radius: 50px;
   box-sizing: border-box;
 }
@@ -63,6 +65,6 @@ export default {
   font-weight: 500;
   font-size: 14px;
   line-height: 143%;
-  color: #FFFFFF;
+  color: $default-background;
 }
 </style>

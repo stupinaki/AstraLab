@@ -88,7 +88,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -98,7 +100,7 @@ export default {
   justify-content: space-between;
   gap: 20px;
   align-items: center;
-  background: #F3F3FA;
+  background: $input-background;
   border-radius: 50px;
   border: none;
   padding: 8px 18px;
@@ -110,7 +112,7 @@ export default {
   align-items: center;
   border-radius: 50px;
   border: none;
-  background: #FF668333;
+  background: $input-error-background;
   padding: 8px 18px;
 }
 .input{
@@ -121,7 +123,7 @@ export default {
   line-height: 28px;
   display: flex;
   align-items: center;
-  color: #181C43;
+  color: $default-text-color;
   outline: none;
   width: 100%;
 }
@@ -131,7 +133,7 @@ export default {
   line-height: 20px;
   display: flex;
   align-items: center;
-  color: rgba(0, 0, 0, 0.8);
+  color: $default-label-color;
   justify-content: space-between;
   padding: 0 18px;
 }
@@ -143,7 +145,7 @@ export default {
   height: 18px;
   padding-left: 18px;
   font-size: 10px;
-  color: #FF6683;
+  color: $error-color;
 }
 
 

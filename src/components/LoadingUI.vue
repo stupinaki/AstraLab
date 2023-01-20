@@ -17,14 +17,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .loader-wrapper {
   position: fixed;
   top: 0;
   height: 100%;
   width: 100%;
   z-index: 999;
-  background-color: #00000033;
+  background-color: $loading-background;
 }
 
 .dots-wrapper {
@@ -38,7 +40,7 @@ export default {
   width: 8px;
   height: 8px;
   margin: 6px;
-  background-color: pink;
+  background-color: $hover-color;
   border-radius: 50%;
 }
 

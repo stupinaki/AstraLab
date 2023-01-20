@@ -28,7 +28,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .welcome-page {
   display: grid;
   grid-template-rows: 1fr 2fr;
@@ -50,7 +52,7 @@ export default {
   font-size: 22px;
   line-height: 136%;
   letter-spacing: 0.02em;
-  color: #181C43;
+  color: $default-text-color;
 }
 
 .img-wrapper {

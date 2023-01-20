@@ -40,7 +40,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .enter-screen{
   display: flex;
   flex-direction: column;
@@ -67,7 +69,7 @@ export default {
   align-items: center;
   text-align: center;
   letter-spacing: 0.02em;
-  color: #181C43;
+  color: $default-text-color;
 }
 
 .sub-title {
@@ -78,7 +80,7 @@ export default {
   align-items: center;
   text-align: center;
   letter-spacing: 0.02em;
-  color: #3E4462;
+  color: $secondary-text-color;
 }
 
 .link-wrapper {
@@ -94,7 +96,7 @@ export default {
 }
 
 .link-text:hover {
-  background-color: aqua;
+  background-color: $hover-color;
 }
 
 .link-text {
@@ -104,8 +106,8 @@ export default {
   border-radius: 50px;
   border: none;
   padding: 16px 32px;
-  color: #000;
-  background: #FFFF;
+  color: $default-link-color;
+  background: $default-background;
 }
 
 .img-wrapper {

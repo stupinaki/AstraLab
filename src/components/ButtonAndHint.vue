@@ -4,6 +4,7 @@
         :class="passwordHintStyle"
     />
     <button
+        type="button"
         class="question-btn"
         @click="onClick"
     >

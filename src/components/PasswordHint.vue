@@ -16,10 +16,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables";
+
 .wrapper {
   position: relative;
-  background: #1E1A3E;
+  background: $hint-background;
   box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   width: 184px;
@@ -31,7 +33,7 @@ export default {
   display: flex;
   align-items: center;
   text-align: center;
-  color: #F3F3F3;
+  color: $input-background;
   padding: 8px 12px;
 }
 .polygon{
@@ -42,6 +44,6 @@ export default {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #1E1A3E;
+  border-top: 6px solid $hint-background;
 }
 </style>
