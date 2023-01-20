@@ -1,6 +1,9 @@
 // Для пароля условия: от 8 символов, 2 заглавных, 1 специальный символ.
 
 export function validatePassword(password) {
+    if(!password) {
+        return false;
+    }
     const symbols = [
         '!', '#', '$', '%', '&', '(', ')', '*', '+',
         ',', '-', '.', '/', ':', ';', '<', '=', '>',

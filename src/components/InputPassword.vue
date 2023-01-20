@@ -6,11 +6,10 @@
     </div>
     <div :class="inputWrapperStyle">
       <input
-          v-model="password"
+          v-model="inputValue"
           :type="inputType"
           class="input"
           autocomplete="current-password"
-          @blur="onBlur"
           @focus="onFocus"
           @change="onChange"
       >
@@ -19,7 +18,7 @@
       />
     </div>
     <div class="error-message">
-      <div v-show="isError">
+      <div v-show="errorMessage">
         {{ errorMessage }}
       </div>
     </div>
@@ -27,7 +26,6 @@
 </template>
 
 <script>
-import { validatePassword } from "@/helpers/validatePassword.js";
 import ButtonToggleImg from "@/components/ButtonToggleImg.vue";
 import ButtonAndHint from "@/components/ButtonAndHint.vue";
 
@@ -37,21 +35,23 @@ export default {
   data() {
     return {
       isTypePassword: true,
-      password: undefined,
-      isError: false,
+      inputValue: undefined,
     }
   },
   props: {
+    id: {
+      type: Number || String,
+      required: true,
+    },
     label: {
       type: String,
       required: true,
     },
-    errorMessage: String,
-    isHint: {
-      type: Boolean,
-      default: false,
+    errorMessage: {
+      type: String,
+      default: '',
     },
-    isNeedValidatePassword: {
+    isHint: {
       type: Boolean,
       default: false,
     },
@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     inputWrapperStyle() {
-      return this.$data.isError ? "input-wrapper-error" : "input-wrapper";
+      return this.$props.errorMessage ? "input-wrapper-error" : "input-wrapper";
     },
     inputType() {
       return this.$data.isTypePassword ? 'password' : 'text';
@@ -72,21 +72,18 @@ export default {
     onChangeInputType() {
       this.$data.isTypePassword = !this.$data.isTypePassword;
     },
-    onBlur() {
-      if(this.$props.isNeedValidatePassword) {
-        this.$data.isError = !validatePassword(this.$data.password);
-      }
-    },
     onFocus(e) {
-      if(this.$data.password) {
+      if(this.$data.inputValue) {
         e.target.select();
       }
-      this.$data.isError = false;
     },
     onChange() {
-      this.$emit('passwordInputChange', this.$data.password)
+      const data = {
+        value: this.$data.inputValue,
+        inputId: this.$props.id,
+      }
+      this.$emit('passwordInputChange', data);
     },
-    //todo добавить проверку что повторно введенные пароли совпадают
   }
 }
 </script>

@@ -10,12 +10,16 @@
             :key="inputRegular.id"
             :type="inputRegular.type"
             :label="inputRegular.label"
+            :id="inputRegular.id"
+            :is-need-validate-email="true"
+            :error-message="inputRegular.errorMessage"
             @regularInputChange="onRegularInputChange"
         >
         </InputUI>
         <InputPassword
             :key="inputPassword.id"
             :label="inputPassword.label"
+            :id="inputPassword.id"
             @passwordInputChange="onPasswordInputChange"
         />
       </div>

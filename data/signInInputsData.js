@@ -1,7 +1,7 @@
 
 export const  inputRegular =
     {
-        id: 6,
+        id: 'email',
         label: 'Email',
         type: 'email',
         errorMessage: 'Enter valid email',
@@ -9,7 +9,7 @@ export const  inputRegular =
 
 export const inputPassword =
     {
-        id: 7,
+        id: 'password',
         label: 'Password',
         type: 'password',
         errorMessage: 'Enter valid password',

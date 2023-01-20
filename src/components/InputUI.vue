@@ -23,11 +23,16 @@
 
 <script>
 import {validateEmail} from "@/helpers/validateEmail.js";
+import {checkName} from "@/helpers/checkName.js";
 
 export default {
   name: "InputUI",
   emits: ['regularInputChange'],
   props: {
+    id: {
+      type: Number || String,
+      required: true,
+    },
     type: {
       type: String,
       required: true,
@@ -37,6 +42,10 @@ export default {
       required: true,
     },
     isNeedValidateEmail: {
+      type: Boolean,
+      default: false,
+    },
+    isNeedValidateName: {
       type: Boolean,
       default: false,
     },
@@ -58,6 +67,9 @@ export default {
       if(this.$props.isNeedValidateEmail) {
         this.$data.isError = !validateEmail(this.inputValue);
       }
+      if(this.$props.isNeedValidateName) {
+        this.$data.isError = !checkName(this.inputValue);
+      }
     },
     onFocus(e) {
       if(this.$data.inputValue) {
@@ -66,7 +78,11 @@ export default {
       this.$data.isError = false;
     },
     onChange() {
-      this.$emit('regularInputChange', this.$data.inputValue)
+      const data = {
+        value: this.$data.inputValue,
+        inputId: this.$props.id,
+      }
+      this.$emit('regularInputChange', data);
     }
   }
 }
