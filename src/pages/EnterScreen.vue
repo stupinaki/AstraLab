@@ -5,7 +5,7 @@
         <span class="sub-title">Bring your media to the next level!</span>
         <div class="link-wrapper">
           <router-link
-              :to="{name: routerNames.SignIn}"
+              :to="{name: routerNames.SignUp}"
               class="link"
           >
             <div class="link-text">
@@ -14,7 +14,7 @@
           </router-link>
 
           <router-link
-              :to="{name: routerNames.SignIn}"
+              :to="{name: routerNames.SignUp}"
               class="link"
           >
             <img src="../assets/buttonRound.svg" alt="arrow">
@@ -41,8 +41,6 @@ export default {
 </script>
 
 <style scoped>
-@import "../variables.scss";
-
 .enter-screen{
   display: flex;
   flex-direction: column;

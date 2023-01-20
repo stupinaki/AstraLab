@@ -45,6 +45,7 @@
 
 <script>
 import {routerNames} from "@/router/routers.js";
+import {authorization} from "@/helpers/authorization.js";
 import {validateEmail} from "@/helpers/validateEmail";
 import {validatePassword} from "@/helpers/validatePassword";
 import InputUI from "@/components/InputUI.vue";
@@ -103,33 +104,11 @@ export default {
   methods: {
     async onSubmit() {
       this.$data.isLoading = true;
-
-      const {email, password} = this.$data.inputsValue;
-      const encodedData = btoa(password);
-      // eslint-disable-next-line no-unused-vars
-      const requestData = {
-        email: email,
-        password: encodedData,
-      }
-
-      // const response = await fetch('URL где лежат данные', {
-      //   method: 'GET',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(requestData),
-      // }).then((response) => response.json());
-
-      const testResponse = {
-        userName: 'John Doe',
-        isSuccess: true,
-      };
-
+      const response = await authorization();
       this.$data.isLoading = false;
 
-      if(testResponse.isSuccess) {
-        localStorage.setItem('userName', testResponse.userName);
+      if(response.isSuccess) {
+        localStorage.setItem('userName', response.userName);
         this.$router.push('/welcome');
         return;
       }
