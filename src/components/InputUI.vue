@@ -27,7 +27,7 @@ export default {
   emits: ['regularInputChange'],
   props: {
     id: {
-      type: Number || String,
+      type: String,
       required: true,
     },
     type: {

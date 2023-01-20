@@ -40,7 +40,7 @@ export default {
   },
   props: {
     id: {
-      type: Number || String,
+      type: String,
       required: true,
     },
     label: {
