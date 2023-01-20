@@ -7,31 +7,27 @@
     >
       <div class="inputs">
         <InputUI
-            :key="inputRegular.id"
-            :type="inputRegular.type"
-            :label="inputRegular.label"
-            :id="inputRegular.id"
-            :is-need-validate-email="true"
-            :error-message="inputRegular.errorMessage"
-            @regularInputChange="onRegularInputChange"
+            id="email"
+            type="email"
+            label="Email"
+            :error-message="isNeedErrorMessageForEmail"
+            @regularInputChange="onInputChange"
         >
         </InputUI>
         <InputPassword
-            :key="inputPassword.id"
-            :label="inputPassword.label"
-            :id="inputPassword.id"
-            @passwordInputChange="onPasswordInputChange"
+            id="password"
+            label="Password"
+            :error-message="isNeedErrorMessageForPassword"
+            @passwordInputChange="onInputChange"
         />
       </div>
       <ButtonUI
-          color="blue"
           :is-disabled="isBtnDisabled"
-          @click="onClick"
+          @click="onSubmit"
       >
         Sign In
       </ButtonUI>
     </form>
-
     <ChangePageLink
       title="Don’t have an account yet?"
       router-name="SignUp"
@@ -39,76 +35,109 @@
     />
     <WrongData
         :is-visible="isEmailOrPasswordWrong"
-        @closeWarning="onCloseWarning"
         class="warning-hint"
+        @closeWarning="onCloseWarning"
     />
+    <LoadingUI v-if="isLoading"/>
+
   </div>
 </template>
 
 <script>
 import {routerNames} from "@/router/routers.js";
-import {inputRegular, inputPassword} from "../../data/signInInputsData";
+import {validateEmail} from "@/helpers/validateEmail";
+import {validatePassword} from "@/helpers/validatePassword";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
+import LoadingUI from "@/components/LoadingUI.vue";
 import WrongData from "@/components/WrongData";
-import ChangePageLink from "@/components/ChangePageLink.vue";
 import InputPassword from "@/components/InputPassword.vue";
+import ChangePageLink from "@/components/ChangePageLink.vue";
 
 export default {
   name: "SignIn",
   data() {
     return {
       routerNames,
-      inputRegular,
-      inputPassword,
       inputsValue: {
-        inputRegularValue: undefined,
-        inputPasswordValue: undefined,
+        email: undefined,
+        password: undefined,
       },
       isBtnDisabled: true,
-      //todo нужно брать злачение из ответа от бекенда
-      isEmailOrPasswordWrong: true,
+      isEmailOrPasswordWrong: false,
+      isLoading:  false,
     }
   },
   components: {
     InputUI,
     ButtonUI,
     WrongData,
-    ChangePageLink,
+    LoadingUI,
     InputPassword,
+    ChangePageLink,
+  },
+  computed: {
+    isEmailValid() {
+      return validateEmail(this.$data.inputsValue.email);
+    },
+    isPasswordValid() {
+      return validatePassword(this.$data.inputsValue.password);
+    },
+    isNeedErrorMessageForEmail() {
+      const email = this.$data.inputsValue.email;
+      const isDidNotTouch = email === undefined;
+      if(isDidNotTouch || this.isEmailValid) {
+        return '';
+      }
+      return 'Enter valid email';
+    },
+    isNeedErrorMessageForPassword() {
+      const password = this.$data.inputsValue.password;
+      const isDidNotTouch = password === undefined;
+      if(isDidNotTouch || this.isPasswordValid) {
+        return '';
+      }
+      return 'Enter valid password';
+    },
   },
   methods: {
-    onSubmit() {
-      // console.log('отправляем форму')
-      //todo не отправлять при начатии на кнопку с глазом
-    },
-    onRegularInputChange(data) {
-      this.$data.inputsValue.inputRegularValue = data;
-    },
-    onPasswordInputChange(data) {
-      this.$data.inputsValue.inputPasswordValue = data;
-    },
-    onClick() {
-      const requestData = {
-        email: this.$data.inputsValue.inputRegularValue,
-        password: this.$data.inputPassword,
-      }
-      //в response ожидаю boolean значение от бека, есть такой пользователь или нет
-      const response = fetch('адресс где лежат данные', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-          .then((response) => response.json())
+    async onSubmit() {
+      this.$data.isLoading = true;
 
-      if(response) {
-        this.$router.push('/welcome');
-      }else{
-        this.$data.isEmailOrPasswordWrong = true;
+      const {email, password} = this.$data.inputsValue;
+      const encodedData = btoa(password);
+      // eslint-disable-next-line no-unused-vars
+      const requestData = {
+        email: email,
+        password: encodedData,
       }
+
+      // const response = await fetch('URL где лежат данные', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(requestData),
+      // }).then((response) => response.json());
+
+      const testResponse = {
+        userName: 'John Doe',
+        isSuccess: true,
+      };
+
+      this.$data.isLoading = false;
+
+      if(testResponse.isSuccess) {
+        localStorage.setItem('userName', testResponse.userName);
+        this.$router.push('/welcome');
+        return;
+      }
+      this.$data.isEmailOrPasswordWrong = true;
+    },
+    onInputChange(data) {
+      const key = data.inputId;
+      this.$data.inputsValue[key] = data.value || '';
     },
     onCloseWarning() {
       this.$data.isEmailOrPasswordWrong = false;
@@ -116,9 +145,10 @@ export default {
   },
   watch: {
     inputsValue: {
-      handler(newValue) {
-        const {inputRegularValue, inputPasswordValue} = newValue;
-        if(inputRegularValue && inputPasswordValue) {
+      handler() {
+        const isEmailValid = this.isEmailValid;
+        const isPasswordValid = this.isPasswordValid;
+        if(isEmailValid && isPasswordValid) {
           this.$data.isBtnDisabled = false;
         }
       },

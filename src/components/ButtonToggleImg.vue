@@ -1,7 +1,8 @@
 <template>
     <button
-        @click="onClick"
+        type="button"
         class="button"
+        @click="onClick"
     >
       <img
           v-if="isShowPassword"
@@ -29,7 +30,6 @@ export default {
     onClick() {
       this.$data.isShowPassword = !this.$data.isShowPassword;
       this.$emit('changeInputType');
-      console.log('мы намажи на кнопку с глазом')
     }
   }
 }

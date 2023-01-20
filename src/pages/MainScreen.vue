@@ -1,7 +1,7 @@
 <template>
   <div class="welcome-page">
     <div class="text-wrapper">
-      <h2 class="title"> {{headerWelcome}} </h2>
+      <h2 class="title"> {{welcomeText}} </h2>
     </div>
     <div class="img-wrapper">
       <img src="../assets/womanMainScreen.png" alt="woman in a chair" class="img">
@@ -12,17 +12,19 @@
 <script>
 export default {
   name: "MainScreen",
-  props: {
-    userName: {
-      type: String,
+  data () {
+    return {
+      userName: undefined,
     }
   },
-   computed: {
-    headerWelcome () {
-      const name  = this.$props.userName || 'Dear user';
-      return 'Hello, ' + name + '!';
+  beforeMount() {
+    this.$data.userName = localStorage.getItem('userName');
+  },
+  computed: {
+    welcomeText() {
+      return 'Welcome, ' + this.$data.userName + '!';
     }
-   }
+  }
 }
 </script>
 
@@ -59,6 +61,12 @@ export default {
 .img {
   min-height: 100%;
   width: 100%;
+}
+
+@media screen and (min-width: 600px){
+  .img {
+    display: none;
+  }
 }
 
 </style>

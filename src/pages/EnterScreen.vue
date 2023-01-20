@@ -3,15 +3,14 @@
       <div class="description">
         <h2 class="title">Ready for a great User experience?</h2>
         <span class="sub-title">Bring your media to the next level!</span>
-
         <div class="link-wrapper">
           <router-link
               :to="{name: routerNames.SignIn}"
               class="link"
           >
-            <ButtonUI color="white">
-              Sign In
-            </ButtonUI>
+            <div class="link-text">
+              Sign Up
+            </div>
           </router-link>
 
           <router-link
@@ -30,13 +29,9 @@
 
 <script>
 import {routerNames} from "@/router/routers.js";
-import ButtonUI from "@/components/ButtonUI.vue";
 
 export default {
   name: "EnterScreen",
-  components: {
-    ButtonUI
-  },
   data() {
     return {
       routerNames,
@@ -47,13 +42,14 @@ export default {
 
 <style scoped>
 @import "../variables.scss";
+
 .enter-screen{
-  display: grid;
-  grid-template-rows: 1fr 2fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   gap:12px;
   height: 100%;
   overflow: hidden;
-  //padding-top: $main-top-page-padding;
 }
 
 .description {
@@ -62,6 +58,7 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 20px;
+  margin-top: 64px;
 }
 
 .title {
@@ -98,15 +95,37 @@ export default {
   justify-content: center;
 }
 
+.link-text:hover {
+  background-color: aqua;
+}
+
+.link-text {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 50px;
+  border: none;
+  padding: 16px 32px;
+  color: #000;
+  background: #FFFF;
+}
+
 .img-wrapper {
   width: 100%;
   overflow: hidden;
 }
 
 .img {
-  //height: 100%;
-  //max-width: 100%;
-  min-height: 100%;
-  max-width: 100%;
+  width: 100%;
+  transform: translateY(6px);
+}
+
+@media screen and (min-width: 600px){
+  .enter-screen{
+    justify-content: center;
+  }
+  .img {
+      display: none;
+  }
 }
 </style>

@@ -35,19 +35,25 @@
         />
       </div>
       <ButtonUI
-          color="blue"
           :is-disabled="isBtnDisabled"
-          @click="onClick"
+          @click="onSubmit"
       >
         Sign Up
       </ButtonUI>
     </form>
-
     <ChangePageLink
         title="Already have an account?"
         router-name="SignIn"
         link-text="Sign In"
     />
+    <WrongData
+        :is-visible="isSomeDataWrong"
+        text="Some data was incorrect, please try again"
+        class="warning-hint"
+        @closeWarning="onCloseWarning"
+    />
+
+    <LoadingUI v-if="isLoading"/>
   </div>
 </template>
 
@@ -59,8 +65,10 @@ import {validateEmail} from "@/helpers/validateEmail.js";
 import {checkName} from "@/helpers/checkName.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
-import ChangePageLink from "@/components/ChangePageLink.vue";
+import WrongData from "@/components/WrongData";
+import LoadingUI from "@/components/LoadingUI.vue";
 import InputPassword from "@/components/InputPassword.vue";
+import ChangePageLink from "@/components/ChangePageLink.vue";
 
 export default {
   name: "SignUp",
@@ -73,14 +81,18 @@ export default {
         email: undefined,
         password: undefined,
         passwordRepeat: undefined,
-      }
+      },
+      isLoading:  false,
+      isSomeDataWrong: false,
     }
   },
   components: {
     InputUI,
     ButtonUI,
-    ChangePageLink,
+    LoadingUI,
+    WrongData,
     InputPassword,
+    ChangePageLink,
   },
   computed: {
     isFullNameValid() {
@@ -131,25 +143,48 @@ export default {
 
   },
   methods: {
-    onSubmit() {
-      // const inputsValue = this.$data.inputsValue;
-      // const encodedData = btoa(inputsValue.password);
-      // const data = {
-      //   fullName:  inputsValue.fullName,
-      //   email: inputsValue.email,
-      //   password: encodedData,
-      // }
+    async onSubmit() {
+      this.$data.isLoading = true;
 
-      // console.log('отправляем форму')
-      //todo не отправлять при начатии на кнопку с глазом
-    },
-    onClick() {
-      console.log('мы нажами на кнопку!!!')
+      const inputsValue = this.$data.inputsValue;
+      const encodedData = btoa(inputsValue.password);
+      // eslint-disable-next-line no-unused-vars
+      const data = {
+        fullName:  inputsValue.fullName,
+        email: inputsValue.email,
+        password: encodedData,
+      }
+
+      // const response = await fetch('URL где лежат данные', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(data),
+      // }).then((response) => response.json());
+
+      const testResponse = {
+        userName: 'John Doe',
+        isSuccess: false,
+      };
+
+      this.$data.isLoading = false;
+
+      if(testResponse.isSuccess) {
+        localStorage.setItem('userName', testResponse.userName);
+        this.$router.push('/welcome');
+        return;
+      }
+      this.$data.isSomeDataWrong = true;
     },
     onInputChange(data) {
       const key = data.inputId;
       this.$data.inputsValue[key] = data.value || '';
     },
+    onCloseWarning() {
+      this.$data.isSomeDataWrong = false;
+    }
   },
   watch: {
     inputsValue: {
@@ -204,6 +239,11 @@ export default {
   text-align: center;
   letter-spacing: 0.02em;
   color: #181C43;
+}
+
+.warning-hint {
+  position: fixed;
+  bottom: 2%;
 }
 
 </style>
