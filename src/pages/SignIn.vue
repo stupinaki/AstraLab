@@ -54,10 +54,6 @@ import WrongData from "@/components/WrongData";
 import ChangePageLink from "@/components/ChangePageLink.vue";
 import InputPassword from "@/components/InputPassword.vue";
 
-//1 get data from form
-// 2 sent it to backend with question "do you have this data?"
-// 3 if it correct data - open welcome page, if not - show hint and make all inputs red
-
 export default {
   name: "SignIn",
   data() {

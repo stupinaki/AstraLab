@@ -1,25 +1,25 @@
 <template>
   <div class="sign-up">
     <h2 class="title"> Sign Up </h2>
-    inputsValue: {{inputsValue}}
-    isNeedErrorMessageForPassword: {{isNeedErrorMessageForPassword}}
     <form
         @submit.prevent="onSubmit"
         class="form"
     >
       <div class="inputs">
         <InputUI
-            v-for="input in inputsRegular"
-            :id="input.id"
-            :key="input.id"
-            :type="input.type"
-            :label="input.label"
-            :error-message="input.errorMessage"
-            :is-need-validate-name="input.type === 'text'"
-            :is-need-validate-email="input.type === 'email'"
-            @regularInputChange="onInputChange"
-        >
-        </InputUI>
+              id="fullName"
+              type="text"
+              label="Full name"
+              :error-message="isNeedErrorMessageForFullName"
+              @regularInputChange="onInputChange"
+          />
+        <InputUI
+              id="email"
+              type="email"
+              label="Email"
+              :error-message="isNeedErrorMessageForEmail"
+              @regularInputChange="onInputChange"
+          />
         <InputPassword
             id="password"
             label="Password"
@@ -52,10 +52,11 @@
 </template>
 
 <script>
-import {inputsRegular} from "../../data/signUpInputsData";
 import {routerNames} from "@/router/routers.js";
 import {comparePasswords} from "@/helpers/comparePasswords.js";
 import {validatePassword} from "@/helpers/validatePassword.js";
+import {validateEmail} from "@/helpers/validateEmail.js";
+import {checkName} from "@/helpers/checkName.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
 import ChangePageLink from "@/components/ChangePageLink.vue";
@@ -66,7 +67,6 @@ export default {
   data() {
     return {
       routerNames,
-      inputsRegular,
       isBtnDisabled: true,
       inputsValue: {
         fullName: undefined,
@@ -83,6 +83,12 @@ export default {
     InputPassword,
   },
   computed: {
+    isFullNameValid() {
+      return checkName(this.$data.inputsValue.fullName);
+    },
+    isEmailValid() {
+      return validateEmail(this.$data.inputsValue.email);
+    },
     isPasswordRepeatMatch() {
       const {password, passwordRepeat} = this.$data.inputsValue;
       return comparePasswords(password, passwordRepeat);
@@ -106,6 +112,23 @@ export default {
       }
       return 'Passwords do not match';
     },
+    isNeedErrorMessageForFullName() {
+      const fullName = this.$data.inputsValue.fullName;
+      const isDidNotTouch = fullName === undefined;
+      if(isDidNotTouch || this.isFullNameValid) {
+        return '';
+      }
+      return 'this field cannot be empty';
+    },
+    isNeedErrorMessageForEmail() {
+      const email = this.$data.inputsValue.email;
+      const isDidNotTouch = email === undefined;
+      if(isDidNotTouch || this.isEmailValid) {
+        return '';
+      }
+      return 'Enter valid email';
+    },
+
   },
   methods: {
     onSubmit() {
@@ -127,6 +150,20 @@ export default {
       const key = data.inputId;
       this.$data.inputsValue[key] = data.value || '';
     },
+  },
+  watch: {
+    inputsValue: {
+      handler() {
+        const isFullNameValid = this.isFullNameValid;
+        const isEmailValid = this.isEmailValid;
+        const isPasswordValid = this.isPasswordValid;
+        const isPasswordRepeatValid = this.isPasswordRepeatMatch;
+        if(isFullNameValid && isEmailValid && isPasswordValid && isPasswordRepeatValid) {
+          this.$data.isBtnDisabled = false;
+        }
+      },
+      deep: true,
+    }
   }
 }
 </script>

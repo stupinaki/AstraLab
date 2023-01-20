@@ -6,14 +6,13 @@
          v-model="inputValue"
          :type="type"
          class="input"
-         @blur="onBlur"
          @focus="onFocus"
          @change="onChange"
      >
      <slot/>
    </div>
    <div class="error-message">
-     <div v-show="isError">
+     <div v-show="errorMessage">
        {{ errorMessage }}
      </div>
    </div>
@@ -22,8 +21,6 @@
 </template>
 
 <script>
-import {validateEmail} from "@/helpers/validateEmail.js";
-import {checkName} from "@/helpers/checkName.js";
 
 export default {
   name: "InputUI",
@@ -41,41 +38,23 @@ export default {
       type: String,
       required: true,
     },
-    isNeedValidateEmail: {
-      type: Boolean,
-      default: false,
-    },
-    isNeedValidateName: {
-      type: Boolean,
-      default: false,
-    },
     errorMessage: String,
   },
   data() {
     return {
       inputValue: undefined,
-      isError: false,
     }
   },
   computed: {
     inputWrapperStyle() {
-      return this.$data.isError ? "inputWrapperError" : "inputWrapper";
+      return this.$props.errorMessage ? "inputWrapperError" : "inputWrapper";
     }
   },
   methods: {
-    onBlur() {
-      if(this.$props.isNeedValidateEmail) {
-        this.$data.isError = !validateEmail(this.inputValue);
-      }
-      if(this.$props.isNeedValidateName) {
-        this.$data.isError = !checkName(this.inputValue);
-      }
-    },
     onFocus(e) {
       if(this.$data.inputValue) {
         e.target.select();
       }
-      this.$data.isError = false;
     },
     onChange() {
       const data = {
