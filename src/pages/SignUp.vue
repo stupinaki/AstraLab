@@ -47,7 +47,7 @@
         link-text="Sign In"
     />
     <WrongData
-        :is-visible="isFormInvalid"
+        :is-visible="isSomeDataInvalid"
         text="Some data was incorrect, please try again"
         class="warning-hint"
         @closeWarning="onCloseWarning"
@@ -57,12 +57,9 @@
 </template>
 
 <script>
+import {registrationInputsMixin} from "@/mixins/registrationInputsMixin.js";
+import {formMixin} from "@/mixins/formMixin.js";
 import {routerNames} from "@/router/routers.js";
-import {comparePasswords} from "@/helpers/comparePasswords.js";
-import {validatePassword} from "@/helpers/validatePassword.js";
-import {authorization} from "@/helpers/authorization";
-import {validateEmail} from "@/helpers/validateEmail.js";
-import {checkName} from "@/helpers/checkName.js";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
 import WrongData from "@/components/WrongData";
@@ -72,10 +69,10 @@ import ChangePageLink from "@/components/ChangePageLink.vue";
 
 export default {
   name: "SignUp",
+  mixins: [registrationInputsMixin, formMixin],
   data() {
     return {
       routerNames,
-      isBtnDisabled: true,
       inputsValue: {
         fullName: undefined,
         email: undefined,
@@ -83,7 +80,8 @@ export default {
         passwordRepeat: undefined,
       },
       isLoading:  false,
-      isFormInvalid: false,
+      isBtnDisabled: true,
+      isSomeDataInvalid: false,
     }
   },
   components: {
@@ -93,75 +91,6 @@ export default {
     WrongData,
     InputPassword,
     ChangePageLink,
-  },
-  computed: {
-    isEmailValid() {
-      return validateEmail(this.$data.inputsValue.email);
-    },
-    isPasswordValid() {
-      return validatePassword(this.$data.inputsValue.password);
-    },
-    isFullNameValid() {
-      return checkName(this.$data.inputsValue.fullName);
-    },
-    isPasswordRepeatMatch() {
-      const {password, passwordRepeat} = this.$data.inputsValue;
-      return comparePasswords(password, passwordRepeat);
-    },
-    isNeedErrorMessageForEmail() {
-      const email = this.$data.inputsValue.email;
-      const isDidNotTouch = email === undefined;
-      if(isDidNotTouch || this.isEmailValid) {
-        return '';
-      }
-      return 'Enter valid email';
-    },
-    isNeedErrorMessageForPassword() {
-      const password = this.$data.inputsValue.password;
-      const isDidNotTouch = password === undefined;
-      if(isDidNotTouch || this.isPasswordValid) {
-        return '';
-      }
-      return 'Enter valid password';
-    },
-    isNeedErrorMessageForPasswordRepeat() {
-      const password = this.$data.inputsValue.passwordRepeat;
-      const isDidNotTouch = password === undefined;
-      if(isDidNotTouch || this.isPasswordRepeatMatch) {
-        return '';
-      }
-      return 'Passwords do not match';
-    },
-    isNeedErrorMessageForFullName() {
-      const fullName = this.$data.inputsValue.fullName;
-      const isDidNotTouch = fullName === undefined;
-      if(isDidNotTouch || this.isFullNameValid) {
-        return '';
-      }
-      return 'this field cannot be empty';
-    },
-
-  },
-  methods: {
-    async onSubmit() {
-      this.$data.isLoading = true;
-      const response = await authorization();
-      this.$data.isLoading = false;
-
-      if(response.isSuccess) {
-        localStorage.setItem('userName', response.userName);
-        this.$router.push('/welcome');
-        return;
-      }
-      this.$data.isFormInvalid = true;
-    },
-    onInputChange(data) {
-      const key = data.inputId;
-      this.$data.inputsValue[key] = data.value || '';
-    },
-    onCloseWarning() {
-      this.$data.isFormInvalid = false;
-    }
   },
   watch: {
     inputsValue: {

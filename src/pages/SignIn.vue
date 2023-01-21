@@ -34,7 +34,7 @@
       link-text="Sign Up"
     />
     <WrongData
-        :is-visible="isEmailOrPasswordWrong"
+        :is-visible="isSomeDataInvalid"
         class="warning-hint"
         @closeWarning="onCloseWarning"
     />
@@ -44,10 +44,9 @@
 </template>
 
 <script>
+import {authorizationInputsMixin} from "@/mixins/authorizationInputsMixin.js";
+import {formMixin} from "@/mixins/formMixin.js";
 import {routerNames} from "@/router/routers.js";
-import {authorization} from "@/helpers/authorization.js";
-import {validateEmail} from "@/helpers/validateEmail";
-import {validatePassword} from "@/helpers/validatePassword";
 import InputUI from "@/components/InputUI.vue";
 import ButtonUI from "@/components/ButtonUI.vue";
 import LoadingUI from "@/components/LoadingUI.vue";
@@ -57,6 +56,7 @@ import ChangePageLink from "@/components/ChangePageLink.vue";
 
 export default {
   name: "SignIn",
+  mixins: [authorizationInputsMixin, formMixin],
   data() {
     return {
       routerNames,
@@ -64,9 +64,9 @@ export default {
         email: undefined,
         password: undefined,
       },
-      isBtnDisabled: true,
-      isEmailOrPasswordWrong: false,
       isLoading:  false,
+      isBtnDisabled: true,
+      isSomeDataInvalid: false,
     }
   },
   components: {
@@ -76,51 +76,6 @@ export default {
     LoadingUI,
     InputPassword,
     ChangePageLink,
-  },
-  computed: {
-    isEmailValid() {
-      return validateEmail(this.$data.inputsValue.email);
-    },
-    isPasswordValid() {
-      return validatePassword(this.$data.inputsValue.password);
-    },
-    isNeedErrorMessageForEmail() {
-      const email = this.$data.inputsValue.email;
-      const isDidNotTouch = email === undefined;
-      if(isDidNotTouch || this.isEmailValid) {
-        return '';
-      }
-      return 'Enter valid email';
-    },
-    isNeedErrorMessageForPassword() {
-      const password = this.$data.inputsValue.password;
-      const isDidNotTouch = password === undefined;
-      if(isDidNotTouch || this.isPasswordValid) {
-        return '';
-      }
-      return 'Enter valid password';
-    },
-  },
-  methods: {
-    async onSubmit() {
-      this.$data.isLoading = true;
-      const response = await authorization();
-      this.$data.isLoading = false;
-
-      if(response.isSuccess) {
-        localStorage.setItem('userName', response.userName);
-        this.$router.push('/welcome');
-        return;
-      }
-      this.$data.isEmailOrPasswordWrong = true;
-    },
-    onInputChange(data) {
-      const key = data.inputId;
-      this.$data.inputsValue[key] = data.value || '';
-    },
-    onCloseWarning() {
-      this.$data.isEmailOrPasswordWrong = false;
-    }
   },
   watch: {
     inputsValue: {
