@@ -147,6 +147,4 @@ export default {
   font-size: 10px;
   color: $error-color;
 }
-
-
 </style>
